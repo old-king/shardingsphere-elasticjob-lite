@@ -4,112 +4,64 @@ weight = 1
 chapter = true
 +++
 
-## Java API(Incubating)
+## Registry Center Configuration
 
-### 1. Configuration API
+The component which is used to register and coordinate the distributed behavior of jobs, currently only supports `ZooKeeper`.
 
-#### `JobConfigurationAPI` API for job configuration
+Class name: `org.apache.shardingsphere.elasticjob.reg.zookeeper.ZookeeperConfiguration`
 
-##### YamlJobConfiguration getJobConfiguration(String jobName) Get job settings.
+Configuration: 
 
-* **Parameters:** jobName — Job name
- 
-* **Returns:** Job Setting Object
+| Name                          | Constructor injection |
+| ----------------------------- |:--------------------- |
+| serverLists                   | Yes                   |
+| namespace                     | Yes                   |
+| baseSleepTimeMilliseconds     | No                    |
+| maxSleepTimeMilliseconds      | No                    |
+| maxRetries                    | No                    |
+| sessionTimeoutMilliseconds    | No                    |
+| connectionTimeoutMilliseconds | No                    |
+| digest                        | No                    |
 
-##### void updateJobConfiguration(YamlJobConfiguration yamlJobConfiguration) Update job settings.
+## Job Configuration
 
-* **Parameters:** jobConfiguration — job setting object
+Class name: `org.apache.shardingsphere.elasticjob.api.JobConfiguration`
 
-##### void removeJobConfiguration(String jobName) Delete job settings.
+Configuration：
 
-* **Parameters:** jobName — Job name
- 
-### 2. Operation API
+| Name                          | Constructor injection |
+| ----------------------------- |:--------------------- |
+| jobName                       | Yes                   |
+| shardingTotalCount            | Yes                   |
+| cron                          | No                    |
+| shardingItemParameters        | No                    |
+| jobParameter                  | No                    |
+| monitorExecution              | No                    |
+| failover                      | No                    |
+| misfire                       | No                    |
+| maxTimeDiffSeconds            | No                    |
+| reconcileIntervalMinutes      | No                    |
+| jobShardingStrategyType       | No                    |
+| jobExecutorServiceHandlerType | No                    |
+| jobErrorHandlerType           | No                    |
+| description                   | No                    |
+| props                         | No                    |
+| disabled                      | No                    |
+| overwrite                     | No                    |
 
-#### 2.1 `JobOperateAPI` API for operating jobs
+## Job Listener Configuration
 
-##### void trigger(Optional<String> jobName, Optional<String> serverIp) The job is executed immediately. The job will only be started if it does not conflict with the last running job, and this flag will be automatically cleared after startup.
+### Common Listener Configuration
 
-* **Parameters:**
-  * jobName — Job name
-  * serverIp — IP address of the job server
+Interface name: `org.apache.shardingsphere.elasticjob.api.listener.ElasticJobListener`
 
-##### void disable(Optional<String> jobName, Optional<String> serverIp) The job disable. It will be fragmented again.
+Configuration: no
 
-* **Parameters:**
-  * jobName — Job name
-  * serverIp — IP address of the job server
+### Distributed Listener Configuration
 
-##### void enable(Optional<String> jobName, Optional<String> serverIp) The job enable.
+Class name: `org.apache.shardingsphere.elasticjob.lite.api.listener.AbstractDistributeOnceElasticJobListener`
 
-* **Parameters:**
-  * jobName — Job name
-  * serverIp — IP address of the job server
-
-##### void shutdown(Optional<String> jobName, Optional<String> serverIp) The job shutdown.
-
-* **Parameters:**
-  * jobName — Job name
-  * serverIp — IP address of the job server
-
-##### void remove(Optional<String> jobName, Optional<String> serverIp) The job remove.
-
-* **Parameters:**
-  * jobName — Job name
-  * serverIp — IP address of the job server
-
-#### 2.2 `ShardingOperateAPI` API for operating sharding
-
-##### void disable(String jobName, String item) Disable the job sharding.
-
-* **Parameters:**
-  * jobName — Job name
-  * item — Job sharding item
-
-##### void enable(String jobName, String item) Enable the job sharding.
-
-* **Parameters:**
-  * jobName — Job name
-  * item — Job sharding item
-
-### 3. Statistics API
-
-#### 3.1 `JobStatisticsAPI` API for displaying job status
-
-##### int getJobsTotalCount() Get the total count of jobs.
-
-* **Returns:** Total count of jobs
-
-##### JobBriefInfo getJobBriefInfo(String jobName) Get brief job information.
-
-* **Parameters:** jobName — Job name
- 
-* **Returns:** The brief job information
-
-##### Collection<JobBriefInfo> getAllJobsBriefInfo() Get brief information about all jobs.
-
-* **Returns:** Brief collection of all job information
-
-##### Collection<JobBriefInfo> getJobsBriefInfo(String ip) Get brief information of all jobs under this IP.
-
-* **Parameters:** ip — The Server IP
- 
-* **Returns:** Brief collection of job information
-
-#### 3.2 `ServerStatisticsAPI` API for displaying job server status
-
-##### int getServersTotalCount() Get the total count of job servers.
-
-* **Returns:** Total count of job servers.
-
-##### Collection<ServerBriefInfo> getAllServersBriefInfo() Get brief information of all job servers.
-
-* **Returns:** Brief collection of job server information
-
-#### 3.3 `ShardingStatisticsAPI` API for displaying job sharding status
-
-##### Collection<ShardingInfo> getShardingInfo(String jobName) Get job sharding information collection.
-
-* **Parameters:** jobName — Job name
- 
-* **Returns:** The collection of job sharding information
+| Name                           | Constructor injection |
+| ------------------------------ |:--------------------- |
+| started-timeout-milliseconds   | Yes                   |
+| completed-timeout-milliseconds | Yes                   |
